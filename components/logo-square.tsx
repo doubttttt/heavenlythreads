@@ -13,7 +13,7 @@ export default function LogoSquare({ size }: { size?: 'sm' | undefined }) {
       )}
     >
       <Image
-        src="../app/favicon.ico"
+        src="/favicon.ico"
         alt="Logo"
         width={40}
         height={40}
