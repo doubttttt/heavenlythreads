@@ -341,20 +341,30 @@ export async function getCollections(): Promise<Collection[]> {
 }
 
 export async function getMenu(handle: string): Promise<Menu[]> {
-  const res = await shopifyFetch<ShopifyMenuOperation>({
-    query: getMenuQuery,
-    tags: [TAGS.collections],
-    variables: {
-      handle
-    }
-  });
+  try {
+    const res = await shopifyFetch<ShopifyMenuOperation>({
+      query: getMenuQuery,
+      tags: [TAGS.collections],
+      variables: {
+        handle
+      }
+    });
 
-  return (
-    res.body?.data?.menu?.items.map((item: { title: string; url: string }) => ({
+    if (!res.body?.data?.menu?.items) {
+      return [];
+    }
+
+    return res.body.data.menu.items.map((item: { title: string; url: string }) => ({
       title: item.title,
-      path: item.url.replace(domain, '').replace('/collections', '/search').replace('/pages', '')
-    })) || []
-  );
+      path: item.url
+        .replace(domain, '')
+        .replace('/collections', '/search')
+        .replace('/pages', '')
+    }));
+  } catch (error) {
+    console.error(`Error fetching menu with handle ${handle}:`, error);
+    return [];
+  }
 }
 
 export async function getPage(handle: string): Promise<Page> {
