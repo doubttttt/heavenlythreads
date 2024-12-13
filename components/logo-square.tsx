@@ -17,7 +17,7 @@ export default function LogoSquare({ size }: { size?: 'sm' | undefined }) {
         alt="Logo"
         width={40}
         height={40}
-        layout="fixed"
+        layout="intrinsic"
       />
     </div>
   );
